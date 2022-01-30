@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sample_todo/completed_todo_page.dart'; //遷移先ページインポート
 
 void main() {
   runApp(const MyApp());
@@ -44,10 +45,21 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.checklist),
+            color: Colors.white,
+            onPressed: () { // ボタン押したときに実行される
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CompletedTodoPage(), // SecondPageは遷移先のクラス
+                ),
+              );
+            },
+          ),
+        ],
       ),
-
-      // body: Center(
-      // ),
 
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
