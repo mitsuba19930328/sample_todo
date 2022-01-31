@@ -10,10 +10,12 @@ class _CreateTodoPageState extends State<CreateTodoPage> {
   var _text = '';
   final myFocusNode = FocusNode();
 
+  //todoControllerに記載された内容を元にtodoが新たに生成される予定。
   void _submit() {
-      // 入力内容
+    setState(() {
       _text = _todoController.text;
-    }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
