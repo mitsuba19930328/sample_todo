@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sample_todo/completed_todo_page.dart'; //遷移先ページインポート
+import 'package:sample_todo/completed_todo_page.dart';
+import 'package:sample_todo/create_todo_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -93,7 +94,14 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _createTodo,
+        onPressed: () { // ボタン押したときに実行される
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CreateTodoPage(), // SecondPageは遷移先のクラス
+            ),
+          );
+        },
         tooltip: 'todoチケットの新規作成',
         child: const Icon(Icons.add),
       ),
