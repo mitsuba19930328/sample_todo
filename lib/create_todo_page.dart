@@ -37,6 +37,12 @@ class _CreateTodoPageState extends State<CreateTodoPage> {
                   flex: 14,
                   child: TextFormField(
                     controller: _todoController,
+                    // onTap:() {
+                    //   // onSaved: (String? value) {
+                    //   //   debugPrint(
+                    //   //       'Value for field saved as "$value"');
+                    //   // },
+                    // },
                     autofocus: true,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
@@ -50,12 +56,13 @@ class _CreateTodoPageState extends State<CreateTodoPage> {
               child: Text('追加'),
               onPressed: (){
                 _submit();
+                Navigator.of(context).pop(_text);
               },
             ),
-            Container(
-              padding: EdgeInsets.all(8.0),
-              child: Text(_text),
-            )
+            // Container(
+            //   padding: EdgeInsets.all(8.0),
+            //   child: Text(_text),
+            // )
           ],
         ),
       ),
