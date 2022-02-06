@@ -60,15 +60,27 @@ class TaskViewModel extends ChangeNotifier {
 
   void updateTask() {
     // update処理
-    notifyListeners();
+    // TODO 今は一旦未完成
+    // var updateIndex = _tasks.indexWhere((task) {
+    //   return task.createdAt == updateTask.createdAt;
+    // });
+    // updateTask.memo = memoController.text;
+    // updateTask.updatedAt = DateTime.now();
+    // _tasks[updateIndex] = updateTask;
+    // clear();
+    // notifyListeners();
   }
 
   void deleteTask(int index) {
     //taskの削除処理
+    _tasks.removeAt(index);
     notifyListeners();
   }
 
-  void toggleDone(int index, bool doneFlag) {
+  void toggleDone(int index, int doneFlag) {
+    var task = _tasks[index];
+    task.doneFlag = doneFlag;
+    _tasks[index] = task;
     notifyListeners();
   }
 
