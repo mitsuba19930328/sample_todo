@@ -3,16 +3,16 @@
 // isDoneがint型なのはsqliteにboolian型がないから
 class Task {
   int? id;
-  String? memo;
-  int? doneFlag;
-  final DateTime? createdAt;
-  DateTime? updatedAt;
+  String? status;
+  String? title;
+  String? addedDate;
+  String? completedDate;
 
   Task({
     this.id,
-    this.memo,
-    this.doneFlag,
-    this.createdAt,
-    this.updatedAt
+    this.status,
+    this.title,
+    this.addedDate,
+    this.completedDate,
   });
 }
