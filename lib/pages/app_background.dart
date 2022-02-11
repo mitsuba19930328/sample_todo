@@ -1,10 +1,15 @@
 // app_background.dart
 import 'package:flutter/material.dart';
+import './home_page.dart';
 
 class AppBackgroundPage extends StatelessWidget {
+  AppBackgroundPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraint) {
+
+      debugPrint('========================== ${context}');
+      debugPrint('========================== ${constraint}');
       final height = constraint.maxHeight;
       final width = constraint.maxWidth;
       return Stack(

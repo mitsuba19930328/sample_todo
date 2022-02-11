@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Task List App',
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: true,
       color: Colors.greenAccent, //好きな色を選択
       home: HomePage(),
     );
