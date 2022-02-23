@@ -7,9 +7,6 @@ class AppBackgroundPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraint) {
-
-      debugPrint('========================== ${context}');
-      debugPrint('========================== ${constraint}');
       final height = constraint.maxHeight;
       final width = constraint.maxWidth;
       return Stack(

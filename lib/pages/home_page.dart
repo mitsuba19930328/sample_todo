@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: Stack(
         children: <Widget>[
-          AppBackgroundPage(),
+          // AppBackgroundPage(),
           ListPage(
             key: listPageKey,
           )
