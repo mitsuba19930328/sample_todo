@@ -153,7 +153,7 @@ class _ListPageState extends State<ListPage> {
           motion: ScrollMotion(),
           children: [],
         ),
-        actionPane: SlidableDrawerActionPane(),
+        // actionPane: SlidableDrawerActionPane(),
         child: Column(
           children: <Widget>[
             ListTile(
@@ -164,7 +164,7 @@ class _ListPageState extends State<ListPage> {
                 tasks[i].title.toString(),
                 style: TextStyle(
                     color:
-                    tasks[i].status == 'false' ? Colors.black : Colors.grey,
+                        tasks[i].status == 'false' ? Colors.black : Colors.grey,
                     decoration: tasks[i].status == 'false'
                         ? TextDecoration.none
                         : TextDecoration.lineThrough),
@@ -187,37 +187,37 @@ class _ListPageState extends State<ListPage> {
         ),
         //右にスライドした際に行う処理をここに書きます。
         // 今回はチェックとアンチェックを行う処理をここで行います。
-        actions: <Widget>[
-          tasks[i].status == 'false'
-              ? IconSlideAction(
-            caption: 'Complete',
-            color: Colors.greenAccent,
-            icon: Icons.check,
-            onTap: () {
-              updateItems(tasks[i], i);
-            },
-          )
-              : IconSlideAction(
-            caption: 'Undo',
-            color: Colors.grey,
-            icon: Icons.check,
-            onTap: () {
-              updateItems(tasks[i], i);
-            },
-          )
-        ],
+        // actions: <Widget>[
+        //   tasks[i].status == 'false'
+        //       ? IconSlideAction(
+        //           caption: 'Complete',
+        //           color: Colors.greenAccent,
+        //           icon: Icons.check,
+        //           onTap: () {
+        //             updateItems(tasks[i], i);
+        //           },
+        //         )
+        //       : IconSlideAction(
+        //           caption: 'Undo',
+        //           color: Colors.grey,
+        //           icon: Icons.check,
+        //           onTap: () {
+        //             updateItems(tasks[i], i);
+        //           },
+        //         )
+        // ],
         //右にスライドした際に行う処理をここに書きます。
         // 今回は削除を行う処理をここで行います。
-        secondaryActions: <Widget>[
-          IconSlideAction(
-            caption: 'Delete',
-            color: Colors.red,
-            icon: Icons.delete,
-            onTap: () {
-              removeListItem(tasks[i]);
-            },
-          )
-        ],
+        // secondaryActions: <Widget>[
+        //   IconSlideAction(
+        //     caption: 'Delete',
+        //     color: Colors.red,
+        //     icon: Icons.delete,
+        //     onTap: () {
+        //       removeListItem(tasks[i]);
+        //     },
+        //   )
+        // ],
       ),
     );
   }
@@ -236,7 +236,7 @@ class _ListPageState extends State<ListPage> {
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius:
-                  BorderRadius.horizontal(left: Radius.circular(8.0))),
+                      BorderRadius.horizontal(left: Radius.circular(8.0))),
               child: TextField(
                 //事前に宣言していたTextEditingController(eCtrl）をcontrollerに代入します。
                 controller: eCtrl,
@@ -268,7 +268,7 @@ class _ListPageState extends State<ListPage> {
               color: Colors.blue,
               shape: RoundedRectangleBorder(
                 borderRadius:
-                BorderRadius.horizontal(right: Radius.circular(8.0)),
+                    BorderRadius.horizontal(right: Radius.circular(8.0)),
               ),
               child: Padding(
                 padding: EdgeInsets.all(8.0),
