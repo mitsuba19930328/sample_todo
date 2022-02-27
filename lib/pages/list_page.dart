@@ -130,9 +130,15 @@ class _ListPageState extends State<ListPage> {
                     itemCount: tasks.length,
                     itemBuilder: (BuildContext context, int i) {
                       if (tasks[i].status == 'false') {
-                        checkRun('通ってる12');
+                        return Column(
+                          children: [
+                            //ここに必要なリスト情報を渡す
+                            buildListItem(tasks, i),
+                          ],
+                        );
+                      } else {
+                        return Column();
                       }
-                      return buildListItem(tasks, i);
                     },
                   ),
                 )
@@ -176,18 +182,19 @@ class _ListPageState extends State<ListPage> {
       // The end action pane is the one at the right or the bottom side.
       endActionPane: const ActionPane(
         motion: ScrollMotion(),
+        dismissible: null,
         children: [
-          // SlidableAction(
-          //   // An action can be bigger than the others.
-          //   flex: 2,
-          //   onPressed: null,
-          //   backgroundColor: Color(0xFF7BC043),
-          //   foregroundColor: Colors.white,
-          //   icon: Icons.archive,
-          //   label: 'Archive',
-          // ),
           SlidableAction(
             flex: 2,
+            onPressed: null,
+            backgroundColor: Color(0xFF7BC043),
+            foregroundColor: Colors.white,
+            icon: Icons.archive,
+            label: 'Archive',
+          ),
+          SlidableAction(
+            flex: 2,
+            //TODO: onpressedのメソッドの書き方がイマイチ分からない。
             onPressed: null,
             backgroundColor: Color(0xFFFE4A49),
             foregroundColor: Colors.white,
@@ -197,23 +204,19 @@ class _ListPageState extends State<ListPage> {
         ],
       ),
       child: ListTile(
-        subtitle: tasks[i].status == 'false'
-            ? Text(tasks[i].addedDate.toString())
-            : Text(tasks[i].completedDate.toString()),
+        subtitle: Text(tasks[i].addedDate.toString()),
         title: Text(
           tasks[i].title.toString(),
           style: TextStyle(
               color: tasks[i].status == 'false' ? Colors.black : Colors.grey,
-              decoration: tasks[i].status == 'false'
-                  ? TextDecoration.none
-                  : TextDecoration.lineThrough),
+              decoration: TextDecoration.none),
         ),
-        leading: Icon(Icons.list),
+        leading: Icon(
+          Icons.circle_outlined,
+        ),
         trailing: IconButton(
           icon: Icon(
-            (tasks[i].status == 'false')
-                ? Icons.check_box_outline_blank
-                : Icons.check_box,
+            Icons.check_box_outline_blank,
             color: Colors.greenAccent,
           ),
           onPressed: () {
@@ -222,88 +225,5 @@ class _ListPageState extends State<ListPage> {
         ),
       ),
     );
-    // return Dismissible(
-    //   key: ObjectKey(tasks[i]),
-    //   //Slidableを使うことによってwidgetを左右にスライドすることが可能になります。
-    //   onDismissed: (direction) {
-    //     checkRun('通ってるよ');
-    //     removeListItem(tasks[i]);
-    //     setState(() {
-    //       // updateItems(tasks[i], i);
-    //     });
-    //   },
-    //   child: Slidable(
-    //     endActionPane: ActionPane(
-    //       extentRatio: 0.50,
-    //       motion: ScrollMotion(),
-    //       children: [],
-    //     ),
-    //     // actionPane: SlidableDrawerActionPane(),
-    //     child: Column(
-    //       children: <Widget>[
-    //         ListTile(
-    //           subtitle: tasks[i].status == 'false'
-    //               ? Text(tasks[i].addedDate.toString())
-    //               : Text(tasks[i].completedDate.toString()),
-    //           title: Text(
-    //             tasks[i].title.toString(),
-    //             style: TextStyle(
-    //                 color:
-    //                     tasks[i].status == 'false' ? Colors.black : Colors.grey,
-    //                 decoration: tasks[i].status == 'false'
-    //                     ? TextDecoration.none
-    //                     : TextDecoration.lineThrough),
-    //           ),
-    //           leading: Icon(Icons.list),
-    //           trailing: IconButton(
-    //             icon: Icon(
-    //               (tasks[i].status == 'false')
-    //                   ? Icons.check_box_outline_blank
-    //                   : Icons.check_box,
-    //               color: Colors.greenAccent,
-    //             ),
-    //             onPressed: () {
-    //               updateItems(tasks[i], i);
-    //             },
-    //           ),
-    //         ),
-    //         Divider(height: 0)
-    //       ],
-    //     ),
-    //     //右にスライドした際に行う処理をここに書きます。
-    //     // 今回はチェックとアンチェックを行う処理をここで行います。
-    //     // actions: <Widget>[
-    //     //   tasks[i].status == 'false'
-    //     //       ? IconSlideAction(
-    //     //           caption: 'Complete',
-    //     //           color: Colors.greenAccent,
-    //     //           icon: Icons.check,
-    //     //           onTap: () {
-    //     //             updateItems(tasks[i], i);
-    //     //           },
-    //     //         )
-    //     //       : IconSlideAction(
-    //     //           caption: 'Undo',
-    //     //           color: Colors.grey,
-    //     //           icon: Icons.check,
-    //     //           onTap: () {
-    //     //             updateItems(tasks[i], i);
-    //     //           },
-    //     //         )
-    //     // ],
-    //     //右にスライドした際に行う処理をここに書きます。
-    //     // 今回は削除を行う処理をここで行います。
-    //     // secondaryActions: <Widget>[
-    //     //   IconSlideAction(
-    //     //     caption: 'Delete',
-    //     //     color: Colors.red,
-    //     //     icon: Icons.delete,
-    //     //     onTap: () {
-    //     //       removeListItem(tasks[i]);
-    //     //     },
-    //     //   )
-    //     // ],
-    //   ),
-    // );
   }
 }
