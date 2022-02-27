@@ -6,7 +6,6 @@ import 'package:sample_todo/components/input_container.dart';
 import 'package:sample_todo/pages/completed_tasks.dart';
 import 'package:sample_todo/db/task.dart';
 import 'package:sample_todo/pages/app_background.dart';
-// import 'package:sample_todo/pages/completed_task_page.dart';
 
 var listPageKey = GlobalKey<_ListPageState>();
 
@@ -90,6 +89,25 @@ class _ListPageState extends State<ListPage> {
     print(text);
   }
 
+  // List<Task> get _getCompletedTasks {
+  //   List<Task> completedTasks = tasks.where((Task task) {
+  //     if (task.status == 'true') {
+  //       CompletedTasks.add(task);
+  //     }else {
+  //       return false;
+  //     }
+  //   }).toList();
+  //   return tasks;
+  // }
+
+  // List<Task> get getCompletedTasks {
+  //   List<Task> completedTasks = tasks.where((Task task, int index) {
+  //     print(index);
+  //     task.status == 'true';
+  //   }).toList();
+  //   return completedTasks;
+  // }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -107,7 +125,11 @@ class _ListPageState extends State<ListPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CompletedTasks(),
+                      // TODO tasksをcompleted_tasksに変更する
+                      builder: (context) => CompletedTasks(
+                        tasks,
+                        removeListItem,
+                      ),
                     ),
                   );
                 },
@@ -150,39 +172,14 @@ class _ListPageState extends State<ListPage> {
     );
   }
 
-//List itemの定義
   Slidable buildListItem(List<Task> tasks, int i) {
     return Slidable(
       key: ObjectKey(tasks[i]),
-      startActionPane: ActionPane(
-        motion: const ScrollMotion(),
+      endActionPane: const ActionPane(
+        motion: ScrollMotion(),
         dismissible: DismissiblePane(onDismissed: () {
           removeListItem(tasks[i]);
         }),
-
-        // All actions are defined in the children parameter.
-        children: const [
-          // A SlidableAction can have an icon and/or a label.
-          SlidableAction(
-            onPressed: null,
-            backgroundColor: Color(0xFFFE4A49),
-            foregroundColor: Colors.white,
-            icon: Icons.delete,
-            label: 'Delete',
-          ),
-          SlidableAction(
-            onPressed: null,
-            backgroundColor: Color(0xFF21B7CA),
-            foregroundColor: Colors.white,
-            icon: Icons.share,
-            label: 'Share',
-          ),
-        ],
-      ),
-      // The end action pane is the one at the right or the bottom side.
-      endActionPane: const ActionPane(
-        motion: ScrollMotion(),
-        dismissible: null,
         children: [
           SlidableAction(
             flex: 2,
