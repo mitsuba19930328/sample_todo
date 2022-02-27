@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:sample_todo/components/input_container.dart';
+import 'package:sample_todo/pages/completed_tasks.dart';
 import 'package:sample_todo/db/task.dart';
 import 'package:sample_todo/pages/app_background.dart';
 // import 'package:sample_todo/pages/completed_task_page.dart';
@@ -99,22 +100,20 @@ class _ListPageState extends State<ListPage> {
           centerTitle: true,
           actions: <Widget>[
             // ③次項で作成するページです。
-//            Padding(
-//              padding: EdgeInsets.all(8.0),
-//              child: IconButton(
-//                icon: Icon(Icons.check_box),
-//                onPressed: () {
-//                  Navigator.push(
-//                    context,
-//                    MaterialPageRoute(
-//                      builder: (context) => CompletedTasks(
-//                        tasks: tasks,
-//                      ),
-//                    ),
-//                  );
-//                },
-//              ),
-//            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: IconButton(
+                icon: Icon(Icons.check_box),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CompletedTasks(),
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
 //Stackを使用することによってZ軸上にWidgetを重ねることができます。
