@@ -11,19 +11,19 @@ class CompletedTasks extends StatelessWidget {
       appBar: AppBar(
         title: Text('Completed Tasks'),
         centerTitle: true,
-        actions: <Widget>[
-          // ③次項で作成するページです。
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                // 一旦ここはコメントアウト
-                Navigator.pop(context);
-              },
-            ),
-          ),
-        ],
+        // actions: <Widget>[
+        //   // ③次項で作成するページです。
+        //   Padding(
+        //     padding: EdgeInsets.all(8.0),
+        //     child: IconButton(
+        //       icon: Icon(Icons.arrow_back),
+        //       onPressed: () {
+        //         // 一旦ここはコメントアウト
+        //         Navigator.pop(context);
+        //       },
+        //     ),
+        //   ),
+        // ],
       ),
       body: Stack(
         children: <Widget>[

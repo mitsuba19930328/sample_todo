@@ -1,8 +1,8 @@
 // task.dart
 class Task {
   int? id;
-  String? status;
   String? title;
+  String? status;
   String? addedDate;
   String? completedDate;
 

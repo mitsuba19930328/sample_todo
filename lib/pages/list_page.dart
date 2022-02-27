@@ -19,13 +19,8 @@ class ListPage extends StatefulWidget {
 
 class _ListPageState extends State<ListPage> {
   bool validate = false;
-
-//List の宣言
-//List<Task>を宣言することによってTaskオブジェクトのみを格納するリストを作成します
-//注意: []というふうにデフォルトを空と宣言しておかないとエラーが起きます。
   List<Task> tasks = [];
 
-//Input fieldで使用するControllerの定義
   final TextEditingController eCtrl = TextEditingController();
 
   @override
@@ -39,15 +34,15 @@ class _ListPageState extends State<ListPage> {
     super.dispose();
   }
 
-//現在時刻をフォーマット化するための関数を定義
+  //現在時刻をフォーマット化するための関数を定義
   String createDateFormat(DateTime now) {
     var formatter = DateFormat('yyyy/MM/dd/HH:mm');
     String formatted = formatter.format(now);
     return formatted;
   }
 
-//　Validateの後に行われる処理
-// Listに新しいTaskが追加される処理です。
+  //　Validateの後に行われる処理
+  // Listに新しいTaskが追加される処理です。
   void addListItem(String text) {
     validate = false;
     final Task newItem = Task(
@@ -64,7 +59,7 @@ class _ListPageState extends State<ListPage> {
     eCtrl.clear();
   }
 
-//　Taskのアップデートを行う処理
+  //　Taskのアップデートを行う処理
   void updateItems(Task task, int i) {
     if (task.status == 'false') {
       final updatedTask = Task(
@@ -85,9 +80,14 @@ class _ListPageState extends State<ListPage> {
     setState(() {});
   }
 
-//タスクの削除を行う処理
+  //タスクの削除を行う処理
   void removeListItem(Task task) async {
     setState(() => tasks.remove(task));
+  }
+
+  //通ってるかチェック
+  void checkRun(String text) {
+    print(text);
   }
 
   @override
@@ -99,7 +99,6 @@ class _ListPageState extends State<ListPage> {
           title: Text('Tasks'),
           centerTitle: true,
           actions: <Widget>[
-            // ③次項で作成するページです。
             Padding(
               padding: EdgeInsets.all(8.0),
               child: IconButton(
@@ -116,26 +115,23 @@ class _ListPageState extends State<ListPage> {
             ),
           ],
         ),
-//Stackを使用することによってZ軸上にWidgetを重ねることができます。
+
+        //Stackを使用することによってZ軸上にWidgetを重ねることができます。
         body: Stack(
           children: <Widget>[
             AppBackgroundPage(),
-//Columnを使用することで二つのWidgetを重ねるように配置します
+
+            //Columnを使用することで二つのWidgetを重ねるように配置します
             Column(
               children: <Widget>[
-                //後に定義するインプットボックスウィジェットを呼び出します
-
-                //ここ変更
                 InputContainer(validate, eCtrl, addListItem),
-                // buildInputContainer(),
-                //ここまで
-
                 Expanded(
                   child: ListView.builder(
                     itemCount: tasks.length,
                     itemBuilder: (BuildContext context, int i) {
-                      // List 一つのデザインを定義します。
-                      //// 好みで変更してみてください。
+                      if (tasks[i].status == 'false') {
+                        checkRun('通ってる12');
+                      }
                       return buildListItem(tasks, i);
                     },
                   ),
@@ -149,82 +145,165 @@ class _ListPageState extends State<ListPage> {
   }
 
 //List itemの定義
-  Dismissible buildListItem(List<Task> tasks, int i) {
-    return Dismissible(
+  Slidable buildListItem(List<Task> tasks, int i) {
+    return Slidable(
       key: ObjectKey(tasks[i]),
-      //Slidableを使うことによってwidgetを左右にスライドすることが可能になります。
-      child: Slidable(
-        endActionPane: ActionPane(
-          extentRatio: 0.65,
-          motion: ScrollMotion(),
-          children: [],
+      startActionPane: ActionPane(
+        motion: const ScrollMotion(),
+        dismissible: DismissiblePane(onDismissed: () {
+          removeListItem(tasks[i]);
+        }),
+
+        // All actions are defined in the children parameter.
+        children: const [
+          // A SlidableAction can have an icon and/or a label.
+          SlidableAction(
+            onPressed: null,
+            backgroundColor: Color(0xFFFE4A49),
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Delete',
+          ),
+          SlidableAction(
+            onPressed: null,
+            backgroundColor: Color(0xFF21B7CA),
+            foregroundColor: Colors.white,
+            icon: Icons.share,
+            label: 'Share',
+          ),
+        ],
+      ),
+      // The end action pane is the one at the right or the bottom side.
+      endActionPane: const ActionPane(
+        motion: ScrollMotion(),
+        children: [
+          // SlidableAction(
+          //   // An action can be bigger than the others.
+          //   flex: 2,
+          //   onPressed: null,
+          //   backgroundColor: Color(0xFF7BC043),
+          //   foregroundColor: Colors.white,
+          //   icon: Icons.archive,
+          //   label: 'Archive',
+          // ),
+          SlidableAction(
+            flex: 2,
+            onPressed: null,
+            backgroundColor: Color(0xFFFE4A49),
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Delete',
+          ),
+        ],
+      ),
+      child: ListTile(
+        subtitle: tasks[i].status == 'false'
+            ? Text(tasks[i].addedDate.toString())
+            : Text(tasks[i].completedDate.toString()),
+        title: Text(
+          tasks[i].title.toString(),
+          style: TextStyle(
+              color: tasks[i].status == 'false' ? Colors.black : Colors.grey,
+              decoration: tasks[i].status == 'false'
+                  ? TextDecoration.none
+                  : TextDecoration.lineThrough),
         ),
-        // actionPane: SlidableDrawerActionPane(),
-        child: Column(
-          children: <Widget>[
-            ListTile(
-              subtitle: tasks[i].status == 'false'
-                  ? Text(tasks[i].addedDate.toString())
-                  : Text(tasks[i].completedDate.toString()),
-              title: Text(
-                tasks[i].title.toString(),
-                style: TextStyle(
-                    color:
-                        tasks[i].status == 'false' ? Colors.black : Colors.grey,
-                    decoration: tasks[i].status == 'false'
-                        ? TextDecoration.none
-                        : TextDecoration.lineThrough),
-              ),
-              leading: Icon(Icons.list),
-              trailing: IconButton(
-                icon: Icon(
-                  (tasks[i].status == 'false')
-                      ? Icons.check_box_outline_blank
-                      : Icons.check_box,
-                  color: Colors.greenAccent,
-                ),
-                onPressed: () {
-                  updateItems(tasks[i], i);
-                },
-              ),
-            ),
-            Divider(height: 0)
-          ],
+        leading: Icon(Icons.list),
+        trailing: IconButton(
+          icon: Icon(
+            (tasks[i].status == 'false')
+                ? Icons.check_box_outline_blank
+                : Icons.check_box,
+            color: Colors.greenAccent,
+          ),
+          onPressed: () {
+            updateItems(tasks[i], i);
+          },
         ),
-        //右にスライドした際に行う処理をここに書きます。
-        // 今回はチェックとアンチェックを行う処理をここで行います。
-        // actions: <Widget>[
-        //   tasks[i].status == 'false'
-        //       ? IconSlideAction(
-        //           caption: 'Complete',
-        //           color: Colors.greenAccent,
-        //           icon: Icons.check,
-        //           onTap: () {
-        //             updateItems(tasks[i], i);
-        //           },
-        //         )
-        //       : IconSlideAction(
-        //           caption: 'Undo',
-        //           color: Colors.grey,
-        //           icon: Icons.check,
-        //           onTap: () {
-        //             updateItems(tasks[i], i);
-        //           },
-        //         )
-        // ],
-        //右にスライドした際に行う処理をここに書きます。
-        // 今回は削除を行う処理をここで行います。
-        // secondaryActions: <Widget>[
-        //   IconSlideAction(
-        //     caption: 'Delete',
-        //     color: Colors.red,
-        //     icon: Icons.delete,
-        //     onTap: () {
-        //       removeListItem(tasks[i]);
-        //     },
-        //   )
-        // ],
       ),
     );
+    // return Dismissible(
+    //   key: ObjectKey(tasks[i]),
+    //   //Slidableを使うことによってwidgetを左右にスライドすることが可能になります。
+    //   onDismissed: (direction) {
+    //     checkRun('通ってるよ');
+    //     removeListItem(tasks[i]);
+    //     setState(() {
+    //       // updateItems(tasks[i], i);
+    //     });
+    //   },
+    //   child: Slidable(
+    //     endActionPane: ActionPane(
+    //       extentRatio: 0.50,
+    //       motion: ScrollMotion(),
+    //       children: [],
+    //     ),
+    //     // actionPane: SlidableDrawerActionPane(),
+    //     child: Column(
+    //       children: <Widget>[
+    //         ListTile(
+    //           subtitle: tasks[i].status == 'false'
+    //               ? Text(tasks[i].addedDate.toString())
+    //               : Text(tasks[i].completedDate.toString()),
+    //           title: Text(
+    //             tasks[i].title.toString(),
+    //             style: TextStyle(
+    //                 color:
+    //                     tasks[i].status == 'false' ? Colors.black : Colors.grey,
+    //                 decoration: tasks[i].status == 'false'
+    //                     ? TextDecoration.none
+    //                     : TextDecoration.lineThrough),
+    //           ),
+    //           leading: Icon(Icons.list),
+    //           trailing: IconButton(
+    //             icon: Icon(
+    //               (tasks[i].status == 'false')
+    //                   ? Icons.check_box_outline_blank
+    //                   : Icons.check_box,
+    //               color: Colors.greenAccent,
+    //             ),
+    //             onPressed: () {
+    //               updateItems(tasks[i], i);
+    //             },
+    //           ),
+    //         ),
+    //         Divider(height: 0)
+    //       ],
+    //     ),
+    //     //右にスライドした際に行う処理をここに書きます。
+    //     // 今回はチェックとアンチェックを行う処理をここで行います。
+    //     // actions: <Widget>[
+    //     //   tasks[i].status == 'false'
+    //     //       ? IconSlideAction(
+    //     //           caption: 'Complete',
+    //     //           color: Colors.greenAccent,
+    //     //           icon: Icons.check,
+    //     //           onTap: () {
+    //     //             updateItems(tasks[i], i);
+    //     //           },
+    //     //         )
+    //     //       : IconSlideAction(
+    //     //           caption: 'Undo',
+    //     //           color: Colors.grey,
+    //     //           icon: Icons.check,
+    //     //           onTap: () {
+    //     //             updateItems(tasks[i], i);
+    //     //           },
+    //     //         )
+    //     // ],
+    //     //右にスライドした際に行う処理をここに書きます。
+    //     // 今回は削除を行う処理をここで行います。
+    //     // secondaryActions: <Widget>[
+    //     //   IconSlideAction(
+    //     //     caption: 'Delete',
+    //     //     color: Colors.red,
+    //     //     icon: Icons.delete,
+    //     //     onTap: () {
+    //     //       removeListItem(tasks[i]);
+    //     //     },
+    //     //   )
+    //     // ],
+    //   ),
+    // );
   }
 }
