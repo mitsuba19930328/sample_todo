@@ -80,7 +80,7 @@ class _ListPageState extends State<ListPage> {
   }
 
   //タスクの削除を行う処理
-  void removeListItem(Task task) async {
+  void _removeListItem(Task task) {
     setState(() => tasks.remove(task));
   }
 
@@ -88,25 +88,6 @@ class _ListPageState extends State<ListPage> {
   void checkRun(String text) {
     print(text);
   }
-
-  // List<Task> get _getCompletedTasks {
-  //   List<Task> completedTasks = tasks.where((Task task) {
-  //     if (task.status == 'true') {
-  //       CompletedTasks.add(task);
-  //     }else {
-  //       return false;
-  //     }
-  //   }).toList();
-  //   return tasks;
-  // }
-
-  // List<Task> get getCompletedTasks {
-  //   List<Task> completedTasks = tasks.where((Task task, int index) {
-  //     print(index);
-  //     task.status == 'true';
-  //   }).toList();
-  //   return completedTasks;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +109,7 @@ class _ListPageState extends State<ListPage> {
                       // TODO tasksをcompleted_tasksに変更する
                       builder: (context) => CompletedTasks(
                         tasks,
-                        removeListItem,
+                        _removeListItem,
                       ),
                     ),
                   );
@@ -175,10 +156,10 @@ class _ListPageState extends State<ListPage> {
   Slidable buildListItem(List<Task> tasks, int i) {
     return Slidable(
       key: ObjectKey(tasks[i]),
-      endActionPane: const ActionPane(
+      endActionPane: ActionPane(
         motion: ScrollMotion(),
         dismissible: DismissiblePane(onDismissed: () {
-          removeListItem(tasks[i]);
+          _removeListItem(tasks[i]);
         }),
         children: [
           SlidableAction(
@@ -192,7 +173,7 @@ class _ListPageState extends State<ListPage> {
           SlidableAction(
             flex: 2,
             //TODO: onpressedのメソッドの書き方がイマイチ分からない。
-            onPressed: null,
+            onPressed: (context) => _removeListItem(tasks[i]),
             backgroundColor: Color(0xFFFE4A49),
             foregroundColor: Colors.white,
             icon: Icons.delete,
