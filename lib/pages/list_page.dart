@@ -79,7 +79,9 @@ class _ListPageState extends State<ListPage> {
           completedDate: '');
       tasks[i] = updatedTask;
     }
-    setState(() {});
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      setState(() {});
+    });
   }
 
   //タスクの削除を行う処理

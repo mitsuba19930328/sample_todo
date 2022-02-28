@@ -4,7 +4,7 @@ import 'package:sample_todo/pages/app_background.dart';
 import 'package:sample_todo/pages/list_page.dart';
 import 'package:sample_todo/db/task.dart';
 
-class CompletedTasks extends StatefulWidget {
+class CompletedTasks extends StatelessWidget {
   // const CompletedTasks({Key? key}) : super(key: key);
   List<Task> tasks = [];
   static const String _PageTitle = 'Completed Tasks';
@@ -20,18 +20,11 @@ class CompletedTasks extends StatefulWidget {
   );
 
   @override
-  State<CompletedTasks> createState() => _CompletedTasksState();
-
-  static add(Task task) {}
-}
-
-class _CompletedTasksState extends State<CompletedTasks> {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(CompletedTasks._PageTitle),
+        title: Text(_PageTitle),
         centerTitle: true,
       ),
       body: Stack(
@@ -43,16 +36,16 @@ class _CompletedTasksState extends State<CompletedTasks> {
             children: <Widget>[
               Expanded(
                 child: ListView.builder(
-                  itemCount: widget.tasks.length,
+                  itemCount: tasks.length,
                   itemBuilder: (BuildContext context, int i) {
-                    if (widget.tasks[i].status == 'true') {
+                    if (tasks[i].status == 'true') {
                       return Column(
                         children: [
                           //ここに必要なリスト情報を渡す
                           buildListItem(
-                            widget._updateItems,
-                            widget.deleteTask,
-                            widget.tasks,
+                            _updateItems,
+                            deleteTask,
+                            tasks,
                             i,
                           ),
                         ],
@@ -69,6 +62,8 @@ class _CompletedTasksState extends State<CompletedTasks> {
       ),
     );
   }
+
+  static add(Task task) {}
 }
 
 Slidable buildListItem(
@@ -85,7 +80,7 @@ Slidable buildListItem(
       children: [
         // A SlidableAction can have an icon and/or a label.
         SlidableAction(
-          onPressed: (context) => _updateItems(tasks[i], i),
+          onPressed: ((context) => {_updateItems(tasks[i], i)}),
           // onPressed: (context) => _updateItems(tasks[i], i),
           backgroundColor: Colors.blue,
           foregroundColor: Colors.white,
@@ -95,9 +90,11 @@ Slidable buildListItem(
       ],
     ),
     // The end action pane is the one at the right or the bottom side.
-    endActionPane: const ActionPane(
+    endActionPane: ActionPane(
       motion: ScrollMotion(),
-      dismissible: null,
+      dismissible: DismissiblePane(onDismissed: () {
+        deleteTask(tasks[i]);
+      }),
       children: [
         SlidableAction(
           flex: 2,
@@ -127,7 +124,7 @@ Slidable buildListItem(
           color: Colors.greenAccent,
         ),
         // onPressed: () => null,
-        onPressed: () => deleteTask(tasks[i]),
+        onPressed: _updateItems(tasks[i], i),
       ),
     ),
   );
