@@ -59,8 +59,10 @@ class _ListPageState extends State<ListPage> {
   }
 
   //　Taskのアップデートを行う処理
-  void updateItems(Task task, int i) {
+  void _updateItems(Task task, int i) {
+    print("1");
     if (task.status == 'false') {
+      print("2");
       final updatedTask = Task(
           title: task.title,
           status: 'true',
@@ -69,6 +71,7 @@ class _ListPageState extends State<ListPage> {
       //tasksのi番目のタスクを新しいタスクと入れ替える。
       tasks[i] = updatedTask;
     } else if (task.status == 'true') {
+      print("3");
       final updatedTask = Task(
           title: task.title,
           status: 'false',
@@ -81,6 +84,7 @@ class _ListPageState extends State<ListPage> {
 
   //タスクの削除を行う処理
   void _removeListItem(Task task) {
+    print("削除");
     setState(() => tasks.remove(task));
   }
 
@@ -110,6 +114,8 @@ class _ListPageState extends State<ListPage> {
                       builder: (context) => CompletedTasks(
                         tasks,
                         _removeListItem,
+                        _updateItems,
+                        createDateFormat,
                       ),
                     ),
                   );
@@ -162,14 +168,14 @@ class _ListPageState extends State<ListPage> {
           _removeListItem(tasks[i]);
         }),
         children: [
-          SlidableAction(
-            flex: 2,
-            onPressed: null,
-            backgroundColor: Color(0xFF7BC043),
-            foregroundColor: Colors.white,
-            icon: Icons.archive,
-            label: 'Archive',
-          ),
+          // SlidableAction(
+          //   flex: 2,
+          //   onPressed: null,
+          //   backgroundColor: Color(0xFF7BC043),
+          //   foregroundColor: Colors.white,
+          //   icon: Icons.archive,
+          //   label: 'Archive',
+          // ),
           SlidableAction(
             flex: 2,
             //TODO: onpressedのメソッドの書き方がイマイチ分からない。
@@ -198,7 +204,7 @@ class _ListPageState extends State<ListPage> {
             color: Colors.greenAccent,
           ),
           onPressed: () {
-            updateItems(tasks[i], i);
+            _updateItems(tasks[i], i);
           },
         ),
       ),

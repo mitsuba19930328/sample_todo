@@ -1,25 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:sample_todo/pages/app_background.dart';
+import 'package:sample_todo/pages/list_page.dart';
 import 'package:sample_todo/db/task.dart';
 
-class CompletedTasks extends StatelessWidget {
+class CompletedTasks extends StatefulWidget {
   // const CompletedTasks({Key? key}) : super(key: key);
   List<Task> tasks = [];
   static const String _PageTitle = 'Completed Tasks';
   final Function deleteTask;
+  final Function _updateItems;
+  final Function createDateFormat;
 
   CompletedTasks(
     this.tasks,
     this.deleteTask,
+    this._updateItems,
+    this.createDateFormat,
   );
 
+  @override
+  State<CompletedTasks> createState() => _CompletedTasksState();
+
+  static add(Task task) {}
+}
+
+class _CompletedTasksState extends State<CompletedTasks> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(_PageTitle),
+        title: Text(CompletedTasks._PageTitle),
         centerTitle: true,
       ),
       body: Stack(
@@ -31,13 +43,18 @@ class CompletedTasks extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: ListView.builder(
-                  itemCount: tasks.length,
+                  itemCount: widget.tasks.length,
                   itemBuilder: (BuildContext context, int i) {
-                    if (tasks[i].status == 'true') {
+                    if (widget.tasks[i].status == 'true') {
                       return Column(
                         children: [
                           //ここに必要なリスト情報を渡す
-                          buildListItem(tasks, i),
+                          buildListItem(
+                            widget._updateItems,
+                            widget.deleteTask,
+                            widget.tasks,
+                            i,
+                          ),
                         ],
                       );
                     } else {
@@ -52,20 +69,24 @@ class CompletedTasks extends StatelessWidget {
       ),
     );
   }
-
-  static add(Task task) {}
 }
 
-Slidable buildListItem(List<Task> tasks, int i) {
+Slidable buildListItem(
+  Function _updateItems,
+  Function deleteTask,
+  List<Task> tasks,
+  int i,
+) {
   return Slidable(
     key: ObjectKey(tasks[i]),
     startActionPane: ActionPane(
-      motion: const ScrollMotion(),
+      motion: ScrollMotion(),
       // All actions are defined in the children parameter.
-      children: const [
+      children: [
         // A SlidableAction can have an icon and/or a label.
         SlidableAction(
-          onPressed: null,
+          onPressed: (context) => _updateItems(tasks[i], i),
+          // onPressed: (context) => _updateItems(tasks[i], i),
           backgroundColor: Colors.blue,
           foregroundColor: Colors.white,
           icon: Icons.replay,
@@ -105,10 +126,8 @@ Slidable buildListItem(List<Task> tasks, int i) {
           Icons.check_box,
           color: Colors.greenAccent,
         ),
-        onPressed: () {
-          // TODO:ここにupdateTasksを入れる。
-          null;
-        },
+        // onPressed: () => null,
+        onPressed: () => deleteTask(tasks[i]),
       ),
     ),
   );
