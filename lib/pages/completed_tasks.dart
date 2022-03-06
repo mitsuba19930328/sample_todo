@@ -124,7 +124,9 @@ Slidable buildListItem(
           color: Colors.greenAccent,
         ),
         // onPressed: () => null,
-        onPressed: _updateItems(tasks[i], i),
+        onPressed: () => {
+          deleteTask(tasks[i]),
+        },
       ),
     ),
   );
