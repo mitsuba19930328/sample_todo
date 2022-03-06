@@ -5,15 +5,14 @@ import 'package:sample_todo/pages/list_page.dart';
 import 'package:sample_todo/db/task.dart';
 
 class CompletedTasks extends StatelessWidget {
-  // const CompletedTasks({Key? key}) : super(key: key);
-  List<Task> tasks = [];
-  static const String _PageTitle = 'Completed Tasks';
+  List<Task> _tasks = [];
   final Function deleteTask;
   final Function _updateItems;
   final Function createDateFormat;
+  static const String _pageTitle = 'Completed Tasks';
 
   CompletedTasks(
-    this.tasks,
+    this._tasks,
     this.deleteTask,
     this._updateItems,
     this.createDateFormat,
@@ -24,28 +23,26 @@ class CompletedTasks extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(_PageTitle),
+        title: const Text(_pageTitle),
         centerTitle: true,
       ),
       body: Stack(
         children: <Widget>[
           AppBackgroundPage(),
-
-          //Columnを使用することで二つのWidgetを重ねるように配置します
           Column(
             children: <Widget>[
               Expanded(
                 child: ListView.builder(
-                  itemCount: tasks.length,
+                  itemCount: _tasks.length,
                   itemBuilder: (BuildContext context, int i) {
-                    if (tasks[i].status == 'true') {
+                    if (_tasks[i].status == 'true') {
                       return Column(
                         children: [
                           //ここに必要なリスト情報を渡す
                           buildListItem(
                             _updateItems,
                             deleteTask,
-                            tasks,
+                            _tasks,
                             i,
                           ),
                         ],
@@ -69,19 +66,16 @@ class CompletedTasks extends StatelessWidget {
 Slidable buildListItem(
   Function _updateItems,
   Function deleteTask,
-  List<Task> tasks,
+  List<Task> _tasks,
   int i,
 ) {
   return Slidable(
-    key: ObjectKey(tasks[i]),
+    key: ObjectKey(_tasks[i]),
     startActionPane: ActionPane(
       motion: ScrollMotion(),
-      // All actions are defined in the children parameter.
       children: [
-        // A SlidableAction can have an icon and/or a label.
         SlidableAction(
-          onPressed: ((context) => {_updateItems(tasks[i], i)}),
-          // onPressed: (context) => _updateItems(tasks[i], i),
+          onPressed: ((context) => {_updateItems(_tasks[i], i)}),
           backgroundColor: Colors.blue,
           foregroundColor: Colors.white,
           icon: Icons.replay,
@@ -89,16 +83,15 @@ Slidable buildListItem(
         ),
       ],
     ),
-    // The end action pane is the one at the right or the bottom side.
     endActionPane: ActionPane(
       motion: ScrollMotion(),
       dismissible: DismissiblePane(onDismissed: () {
-        deleteTask(tasks[i]);
+        deleteTask(_tasks[i]);
       }),
       children: [
         SlidableAction(
           flex: 2,
-          onPressed: null,
+          onPressed: ((context) => {deleteTask(_tasks[i])}),
           backgroundColor: Color(0xFFFE4A49),
           foregroundColor: Colors.white,
           icon: Icons.delete,
@@ -107,9 +100,9 @@ Slidable buildListItem(
       ],
     ),
     child: ListTile(
-      subtitle: Text(tasks[i].completedDate.toString()),
+      subtitle: Text(_tasks[i].completedDate.toString()),
       title: Text(
-        tasks[i].title.toString(),
+        _tasks[i].title.toString(),
         style: TextStyle(
           color: Colors.black,
           decoration: TextDecoration.none,
@@ -123,9 +116,8 @@ Slidable buildListItem(
           Icons.check_box,
           color: Colors.greenAccent,
         ),
-        // onPressed: () => null,
         onPressed: () => {
-          deleteTask(tasks[i]),
+          deleteTask(_tasks[i]),
         },
       ),
     ),

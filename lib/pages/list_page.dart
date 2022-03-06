@@ -18,7 +18,7 @@ class ListPage extends StatefulWidget {
 
 class _ListPageState extends State<ListPage> {
   bool validate = false;
-  List<Task> tasks = [];
+  final List<Task> _tasks = [];
 
   final TextEditingController eCtrl = TextEditingController();
 
@@ -52,7 +52,7 @@ class _ListPageState extends State<ListPage> {
     // SetStateを行うことによってWidgetの内容を更新
     setState(() {
       //tasksの0番目に新しいタスクを追加
-      tasks.insert(0, newItem);
+      _tasks.insert(0, newItem);
     });
     // Controllerの内容を消去する
     eCtrl.clear();
@@ -69,7 +69,7 @@ class _ListPageState extends State<ListPage> {
           addedDate: task.addedDate,
           completedDate: createDateFormat(DateTime.now()));
       //tasksのi番目のタスクを新しいタスクと入れ替える。
-      tasks[i] = updatedTask;
+      _tasks[i] = updatedTask;
     } else if (task.status == 'true') {
       print("3");
       final updatedTask = Task(
@@ -77,22 +77,23 @@ class _ListPageState extends State<ListPage> {
           status: 'false',
           addedDate: task.addedDate,
           completedDate: '');
-      tasks[i] = updatedTask;
+      _tasks[i] = updatedTask;
     }
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      setState(() {});
-    });
+    // WidgetsBinding.instance?.addPostFrameCallback(() {
+    setState(() {});
+    // });
   }
 
   //タスクの削除を行う処理
   void _removeListItem(Task task) {
     print("削除");
-    setState(() => tasks.remove(task));
+    setState(() => _tasks.remove(task));
   }
 
-  //通ってるかチェック
-  void checkRun(String text) {
-    print(text);
+  List<Task> get _completedTasks {
+    return _tasks.where((task) {
+      return task.status == 'true';
+    }).toList();
   }
 
   @override
@@ -114,7 +115,7 @@ class _ListPageState extends State<ListPage> {
                     MaterialPageRoute(
                       // TODO tasksをcompleted_tasksに変更する
                       builder: (context) => CompletedTasks(
-                        tasks,
+                        _tasks,
                         _removeListItem,
                         _updateItems,
                         createDateFormat,
@@ -138,13 +139,13 @@ class _ListPageState extends State<ListPage> {
                 InputContainer(validate, eCtrl, addListItem),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: tasks.length,
+                    itemCount: _tasks.length,
                     itemBuilder: (BuildContext context, int i) {
-                      if (tasks[i].status == 'false') {
+                      if (_tasks[i].status == 'false') {
                         return Column(
                           children: [
                             //ここに必要なリスト情報を渡す
-                            buildListItem(tasks, i),
+                            buildListItem(_tasks, i),
                           ],
                         );
                       } else {
@@ -161,13 +162,13 @@ class _ListPageState extends State<ListPage> {
     );
   }
 
-  Slidable buildListItem(List<Task> tasks, int i) {
+  Slidable buildListItem(List<Task> _tasks, int i) {
     return Slidable(
-      key: ObjectKey(tasks[i]),
+      key: ObjectKey(_tasks[i]),
       endActionPane: ActionPane(
         motion: ScrollMotion(),
         dismissible: DismissiblePane(onDismissed: () {
-          _removeListItem(tasks[i]);
+          _removeListItem(_tasks[i]);
         }),
         children: [
           // SlidableAction(
@@ -181,7 +182,7 @@ class _ListPageState extends State<ListPage> {
           SlidableAction(
             flex: 2,
             //TODO: onpressedのメソッドの書き方がイマイチ分からない。
-            onPressed: (context) => _removeListItem(tasks[i]),
+            onPressed: (context) => _removeListItem(_tasks[i]),
             backgroundColor: Color(0xFFFE4A49),
             foregroundColor: Colors.white,
             icon: Icons.delete,
@@ -190,11 +191,11 @@ class _ListPageState extends State<ListPage> {
         ],
       ),
       child: ListTile(
-        subtitle: Text(tasks[i].addedDate.toString()),
+        subtitle: Text(_tasks[i].addedDate.toString()),
         title: Text(
-          tasks[i].title.toString(),
+          _tasks[i].title.toString(),
           style: TextStyle(
-              color: tasks[i].status == 'false' ? Colors.black : Colors.grey,
+              color: _tasks[i].status == 'false' ? Colors.black : Colors.grey,
               decoration: TextDecoration.none),
         ),
         leading: Icon(
@@ -206,7 +207,7 @@ class _ListPageState extends State<ListPage> {
             color: Colors.greenAccent,
           ),
           onPressed: () {
-            _updateItems(tasks[i], i);
+            _updateItems(_tasks[i], i);
           },
         ),
       ),
